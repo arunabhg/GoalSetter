@@ -9,14 +9,17 @@ export default function App() {
 	const [myGoals, setMyGoals] = useState([]);
 	const [showModal, setShowModal] = useState(false);
 
+	// Show Modal
 	function startAddGoalHandler() {
 		setShowModal(true);
 	}
 
+	// Hide Modal
 	function endAddGoalHandler() {
 		setShowModal(false);
 	}
 
+	// Add new Goal
 	function addGoalHandler(enteredGoalText) {
 		setMyGoals((currentGoals) => [
 			...currentGoals,
@@ -25,6 +28,7 @@ export default function App() {
 		setShowModal(false);
 	}
 
+	// Delete a Goal
 	function deleteGoalHandler(id) {
 		setMyGoals((currentGoals) => {
 			return currentGoals.filter((goal) => goal.id !== id);

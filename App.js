@@ -1,20 +1,78 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from "react";
+import { StyleSheet, View, FlatList, Button } from "react-native";
+import { StatusBar } from "expo-status-bar";
+
+import GoalItem from "./components/GoalItem";
+import GoalInput from "./components/GoalInput";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+	const [myGoals, setMyGoals] = useState([]);
+	const [showModal, setShowModal] = useState(false);
+
+	function startAddGoalHandler() {
+		setShowModal(true);
+	}
+
+	function endAddGoalHandler() {
+		setShowModal(false);
+	}
+
+	function addGoalHandler(enteredGoalText) {
+		setMyGoals((currentGoals) => [
+			...currentGoals,
+			{ text: enteredGoalText, key: Math.random().toString() }
+		]);
+		setShowModal(false);
+	}
+
+	function deleteGoalHandler(id) {
+		setMyGoals((currentGoals) => {
+			return currentGoals.filter((goal) => goal.id !== id);
+		});
+	}
+
+	return (
+		<>
+			<StatusBar style="light" />
+			<View style={styles.appContainer}>
+				<Button
+					title="Add New Goal"
+					color="#a065ec"
+					onPress={startAddGoalHandler}
+				/>
+				<GoalInput
+					onAddGoal={addGoalHandler}
+					visible={showModal}
+					onCancel={endAddGoalHandler}
+				/>
+				<View style={styles.goalsContainer}>
+					<FlatList
+						data={myGoals}
+						renderItem={(itemData) => {
+							return (
+								<GoalItem
+									text={itemData.item.text}
+									id={itemData.item.id}
+									onDeleteItem={deleteGoalHandler}
+								/>
+							);
+						}}
+					/>
+				</View>
+			</View>
+		</>
+	);
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+	appContainer: {
+		flex: 1,
+		paddingTop: 70,
+		paddingHorizontal: 16
+	},
+
+	goalsContainer: {
+		flex: 5
+	}
 });
+

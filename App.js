@@ -23,17 +23,17 @@ export default function App() {
 	function addGoalHandler(enteredGoalText) {
 		setMyGoals((currentGoals) => [
 			...currentGoals,
-			{ text: enteredGoalText, key: Math.random().toString() }
+			{ text: enteredGoalText, id: Math.random().toString() }
 		]);
 		setShowModal(false);
 	}
 
 	// Delete a Goal
-	function deleteGoalHandler(id) {
-		setMyGoals((currentGoals) => {
-			return currentGoals.filter((goal) => goal.id !== id);
+	const deleteGoalHandler = (goalId) => {
+		setMyGoals((prevState) => {
+			return prevState.filter((goal) => goal.id !== goalId);
 		});
-	}
+	};
 
 	return (
 		<>
@@ -51,6 +51,7 @@ export default function App() {
 				/>
 				<View style={styles.goalsContainer}>
 					<FlatList
+						keyExtractor={(item, index) => item.id}
 						data={myGoals}
 						renderItem={(itemData) => {
 							return (
